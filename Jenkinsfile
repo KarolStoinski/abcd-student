@@ -14,6 +14,7 @@ pipeline {
         }
         stage('SCA scan') {
             steps {
+                sh 'mkdir results'
                 sh 'osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json'
                 defectDojoPublisher(artifact: 'results/sca-osv-scanner.json', 
                         productName: 'Juice Shop', 
