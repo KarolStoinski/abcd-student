@@ -12,20 +12,33 @@ pipeline {
                 }
             }
         }
-        stage('SCA scan') {
+        stage('Trufflehog') {
             steps {
-                sh 'mkdir results'
-                sh 'osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json || true'
+                sh 'trufflehog git file://. --only-verified'
             }
-            post {
-                always {
-                    defectDojoPublisher(artifact: 'results/sca-osv-scanner.json', 
-                            productName: 'Juice Shop', 
-                            scanType: 'OSV Scan', 
-                            engagementName: 'karol.stoinski@gmail.com')
-                }
-            }
+            // post {
+            //     always {
+            //         defectDojoPublisher(artifact: 'results/sca-osv-scanner.json', 
+            //                 productName: 'Juice Shop', 
+            //                 scanType: 'OSV Scan', 
+            //                 engagementName: 'karol.stoinski@gmail.com')
+            //     }
+            // }
         }
+        // stage('SCA scan') {
+        //     steps {
+        //         sh 'mkdir results'
+        //         sh 'osv-scanner scan --lockfile package-lock.json --format json --output results/sca-osv-scanner.json || true'
+        //     }
+        //     post {
+        //         always {
+        //             defectDojoPublisher(artifact: 'results/sca-osv-scanner.json', 
+        //                     productName: 'Juice Shop', 
+        //                     scanType: 'OSV Scan', 
+        //                     engagementName: 'karol.stoinski@gmail.com')
+        //         }
+        //     }
+        // }
     //     stage('[ZAP] Baseline passive-scan') {
     //         steps {
     //             sh 'mkdir -p results/'
