@@ -17,14 +17,14 @@ pipeline {
                 sh 'mkdir results'
                 sh 'trufflehog git file://. --only-verified --json > results/trufflehog.json'
             }
-            // post {
-            //     always {
-            //         defectDojoPublisher(artifact: 'results/sca-osv-scanner.json', 
-            //                 productName: 'Juice Shop', 
-            //                 scanType: 'Trufflehog Scan', 
-            //                 engagementName: 'karol.stoinski@gmail.com')
-            //     }
-            // }
+            post {
+                always {
+                    defectDojoPublisher(artifact: 'results/trufflehog.json', 
+                            productName: 'Juice Shop', 
+                            scanType: 'Trufflehog Scan', 
+                            engagementName: 'karol.stoinski@gmail.com')
+                }
+            }
         }
         // stage('SCA scan') {
         //     steps {
