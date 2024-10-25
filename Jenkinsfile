@@ -12,20 +12,27 @@ pipeline {
                 }
             }
         }
-        stage('Trufflehog') {
+        stage('Semgrep Security Scan') {
             steps {
-                sh 'mkdir results'
-                sh 'trufflehog git file://. --only-verified --json > results/trufflehog.json'
-            }
-            post {
-                always {
-                    defectDojoPublisher(artifact: 'results/trufflehog.json', 
-                            productName: 'Juice Shop', 
-                            scanType: 'Trufflehog Scan', 
-                            engagementName: 'karol.stoinski@gmail.com')
+                script {
+                    sh 'semgrep scan --config auto --output semgrep-report.json --json'
                 }
             }
         }
+        // stage('Trufflehog') {
+        //     steps {
+        //         sh 'mkdir results'
+        //         sh 'trufflehog git file://. --only-verified --json > results/trufflehog.json'
+        //     }
+        //     post {
+        //         always {
+        //             defectDojoPublisher(artifact: 'results/trufflehog.json', 
+        //                     productName: 'Juice Shop', 
+        //                     scanType: 'Trufflehog Scan', 
+        //                     engagementName: 'karol.stoinski@gmail.com')
+        //         }
+        //     }
+        // }
         // stage('SCA scan') {
         //     steps {
         //         sh 'mkdir results'
