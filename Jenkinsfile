@@ -15,7 +15,15 @@ pipeline {
         stage('Semgrep Security Scan') {
             steps {
                 script {
-                    sh 'semgrep scan --config auto --output semgrep-report.json --json'
+                    sh 'semgrep scan --config auto --output results/semgrep-report.json --json'
+                }
+            }
+            post {
+                always {
+                    defectDojoPublisher(artifact: 'results/semgrep-report.json', 
+                            productName: 'Juice Shop', 
+                            scanType: 'Semgrep JSON Report', 
+                            engagementName: 'karol.stoinski@gmail.com')
                 }
             }
         }
